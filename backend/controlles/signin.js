@@ -27,8 +27,16 @@ const getSignoutFn = async (ctx, next) => {
   ctx.response.redirect('/signin');
 };
 
+const getBtnData = async (ctx, next) => {
+  ctx.response.body = JSON.stringify({
+    data: [1, 3, 4, 5],
+    success: true
+  })
+}
+
 module.exports = {
   'GET /signin': getSigninFn,
   'POST /signin': postSigninFn,
-  'POST /signout': postSignoutFn
+  'POST /signout': postSignoutFn,
+  'GET /bthdata': getBtnData
 };

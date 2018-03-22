@@ -6,4 +6,4 @@ export default function createReducer (initialState, handlers) {
       return false
     }
   }
-};
+}

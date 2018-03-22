@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'reat-router-dom'
-import { Layout, BackTop } from 'antd'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { Layout } from 'antd'
 import routes from './routers'
 
 const { Content, Footer } = Layout
 const RouteWithSubRouters = (route) => {
+  console.log(route)
   return <Route path={route.path} render={props => {
-      <route.component {...props} routes={route.routes} user={route.user} status={route.state} />
-    }} />
+    return (<route.component {...props} />)
+  }} />
 }
-
 class App extends Component {
   render () {
     return (
@@ -17,17 +17,20 @@ class App extends Component {
         <Layout>
           <Content>
             <Switch>
-              {routes.map((route, index) => {
-                return (
-                  <RouteWithSubRouters key={index} {...route} user={user} status={status} />
-                )
-              })}
+              {
+                routes.map((route, index) => (
+                  <RouteWithSubRouters key={index} {...route} />
+                ))
+              }
             </Switch>
           </Content>
-            <Footer>
-            </Footer>
+          <Footer>
+            11
+          </Footer>
         </Layout>
       </Router>
     )
   }
 }
+
+export default App

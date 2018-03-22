@@ -1,6 +1,6 @@
 import { REQUEST, SUCCESS, FAILURE } from '../constants/actionTypes'
 
-export default function callAPIMiddleware({dispath, getState}) {
+export default function callAPIMiddleware ({dispatch, getState}) {
   return function (next) {
     return function (action) {
       const {
@@ -17,12 +17,12 @@ export default function callAPIMiddleware({dispath, getState}) {
       }
 
       if (typeof actionType !== 'string') {
-        throw new Error('Expected string actionType');
+        throw new Error('Expected string actionType')
       }
 
-      const requestType = actionType + REQUEST;
-      const successType = actionType + SUCCESS;
-      const failureType = actionType + REQUEST;
+      const requestType = actionType + REQUEST
+      const successType = actionType + SUCCESS
+      const failureType = actionType + FAILURE
 
       if (source) {
         window.onunload = () => {
@@ -57,7 +57,7 @@ export default function callAPIMiddleware({dispath, getState}) {
           },
           error => dispatch(Object.assign({}, payload, {
             error: error,
-            type: failtureType
+            type: failureType
           }))
         )
       } else if (data) {

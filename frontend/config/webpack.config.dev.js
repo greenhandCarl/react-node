@@ -11,6 +11,7 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
+const theme = require('./theme');
 // const express = require('express');
 // const request = require('request');
 // const app = express();
@@ -218,11 +219,13 @@ module.exports = {
           },
           // Process JS with Babel.
           {
-            test: /\.(js|jsx)$/,
+            test: /\.(js|jsx|mjs)$/,
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
-              
+              plugins: [
+                ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": "css" }] // `style: true` 会加载 less 文件
+              ],
               // This is a feature of `babel-loader` for webpack (not Babel itself).
               // It enables caching results in ./node_modules/.cache/babel-loader/
               // directory for faster rebuilds.
@@ -236,6 +239,7 @@ module.exports = {
           // in development "style" loader enables hot editing of CSS.
           {
             test: /\.css$/,
+            exclude: /node_modules/,
             use: [
               require.resolve('style-loader'),
               {
@@ -244,6 +248,39 @@ module.exports = {
                   importLoaders: 1,
                   modules: true,
                   localIdentName: '[local]-[hash:base64:5]'
+                },
+              },
+              {
+                loader: require.resolve('postcss-loader'),
+                options: {
+                  // Necessary for external CSS imports to work
+                  // https://github.com/facebookincubator/create-react-app/issues/2677
+                  ident: 'postcss',
+                  plugins: () => [
+                    require('postcss-flexbugs-fixes'),
+                    autoprefixer({
+                      browsers: [
+                        '>1%',
+                        'last 4 versions',
+                        'Firefox ESR',
+                        'not ie < 9', // React doesn't support IE8 anyway
+                      ],
+                      flexbox: 'no-2009',
+                    }),
+                  ],
+                },
+              },
+            ],
+          },
+          {
+            test: /\.css$/,
+            include: /node_modules/,
+            use: [
+              require.resolve('style-loader'),
+              {
+                loader: require.resolve('css-loader'),
+                options: {
+                  importLoaders: 1
                 },
               },
               {
